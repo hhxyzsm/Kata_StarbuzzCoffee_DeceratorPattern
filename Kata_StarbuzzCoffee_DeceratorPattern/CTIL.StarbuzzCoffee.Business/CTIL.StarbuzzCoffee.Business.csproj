@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="Condiment.cs" />
     <Compile Include="Beverage.cs" />
-    <Compile Include="IDrink.cs" />
+    <Compile Include="Drinkable .cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

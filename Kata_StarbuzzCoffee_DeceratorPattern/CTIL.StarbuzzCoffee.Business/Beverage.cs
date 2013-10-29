@@ -5,24 +5,19 @@ using System.Text;
 
 namespace CTIL.StarbuzzCoffee.Business
 {
-    public class Beverage : IDrink
+    public class Beverage : Drinkable
     {
         private Decimal beveragePrice = 0.00M;
-        public string total = "";
-        private string beverageName = "";
+        private string total = string.Empty;
+        private string beverageName = string.Empty;
 
-        public Beverage(Decimal price, string name)
+        public Beverage( string name,Decimal price)
         {
             this.beveragePrice = price;
             this.beverageName = name;
         }
 
-        public Decimal getPrice()
-        {
-            return beveragePrice;
-        }
-
-        public string printF()
+        public string getPrice()
         {
             return this.beverageName + " (" + this.beveragePrice.ToString() + ")";
         }
@@ -32,7 +27,7 @@ namespace CTIL.StarbuzzCoffee.Business
             return this.total;
         }
 
-        public Decimal decorateDrink()
+        public Decimal accumulatePrice()
         {
             this.total = " | Total=" + this.beveragePrice.ToString("f2");
             return this.beveragePrice;

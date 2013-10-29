@@ -5,70 +5,65 @@ using System.Text;
 
 namespace CTIL.StarbuzzCoffee.Business
 {
-    public class Condiment : IDrink
+    public class Condiment : Drinkable
     {
-        private IDrink drink = null;
-        private Decimal condimentPrice = 0.00M;
-        private Decimal condimentDiscount = 1.00M;
-        private string condimentName;
-        public string total = "";
+        private Drinkable drink = null;
+        private Decimal price = 0.00M;
+        private Decimal discount = 1.00M;
+        private string name = string.Empty;
+        private string total = string.Empty;
         private DateTime specialDay = DateTime.Now;
 
-        public Condiment(IDrink drink)
+        public Condiment(Drinkable drink)
         {
             this.drink = drink;
         }
 
-        public Condiment(IDrink drink, Decimal condimentPrice, Decimal discount, string condimentName)
+        public Condiment(Drinkable drink, string condimentName, Decimal condimentPrice, Decimal discount)
         {
             this.drink = drink;
-            this.condimentPrice = condimentPrice;
-            this.condimentDiscount = discount;
-            this.condimentName = condimentName;
+            this.price = condimentPrice;
+            this.discount = discount;
+            this.name = condimentName;
         }
 
-        public Condiment(IDrink drink, Decimal condimentPrice, Decimal discount, string condimentName, DateTime dateTime)
+        public Condiment(Drinkable drink, string condimentName, Decimal condimentPrice, Decimal discount, DateTime dateTime)
         {
             this.drink = drink;
-            this.condimentPrice = condimentPrice;
-            this.condimentDiscount = discount;
-            this.condimentName = condimentName;
+            this.price = condimentPrice;
+            this.discount = discount;
+            this.name = condimentName;
             this.specialDay = dateTime;
         }
 
-        public Condiment(Decimal condimentPrice, Decimal discount, string condimentName)
+        public Condiment(Decimal condimentPrice, string condimentName, Decimal discount)
         {
-            this.condimentPrice = condimentPrice;
-            this.condimentDiscount = discount;
-            this.condimentName = condimentName;
+            this.price = condimentPrice;
+            this.discount = discount;
+            this.name = condimentName;
         }
 
-        public Condiment(IDrink drink, Decimal condimentPrice, string condimentName)
+        public Condiment(Drinkable drink, string condimentName, Decimal condimentPrice)
         {
             this.drink = drink;
-            this.condimentPrice = condimentPrice;
-            this.condimentName = condimentName;
+            this.price = condimentPrice;
+            this.name = condimentName;
         }
 
-        public Condiment(Decimal condimentPrice, string condimentName)
+        public Condiment( string condimentName,Decimal condimentPrice)
         {
-            this.condimentPrice = condimentPrice;
-            this.condimentName = condimentName;
+            this.price = condimentPrice;
+            this.name = condimentName;
         }
 
-        public Decimal getPrice()
+        public string getPrice()
         {
-            return this.condimentPrice;
-        }
-
-        public string printF()
-        {
-            if (this.condimentDiscount == 1.00M)
+            if (this.discount == 1.00M)
             {
-                return this.condimentName + " (" + this.condimentPrice.ToString("f2") + ")";
+                return this.name + " (" + this.price.ToString("f2") + ")";
             }
 
-            return this.condimentName + " (" + this.condimentPrice.ToString("f2") + "*" + (this.condimentDiscount * 100).ToString("f0") + "%" + ")";
+            return this.name + " (" + this.price.ToString("f2") + "*" + (this.discount * 100).ToString("f0") + "%" + ")";
         }
 
         public string getTotal()
@@ -76,20 +71,26 @@ namespace CTIL.StarbuzzCoffee.Business
             return this.total;
         }
 
-        public Decimal decorateDrink()
+        public Decimal accumulatePrice()
         {
             Decimal condimentSum = 0.00M;
 
             if (drink == null)
             {
-                condimentSum = this.condimentPrice * this.condimentDiscount;
+                condimentSum = this.price * this.discount;
             }
             else
             {
-                condimentSum = this.drink.decorateDrink() + this.condimentPrice * this.condimentDiscount;
+                condimentSum = this.drink.accumulatePrice() + this.price * this.discount;
             }
 
-            if (specialDay.DayOfWeek.ToString() == "Friday")
+            condimentSum = specialWeek(condimentSum);
+            return condimentSum;
+        }
+
+        private Decimal specialWeek(Decimal condimentSum)
+        {
+            if (specialDay.DayOfWeek == DayOfWeek.Friday)
             {
                 this.total = " | Total=" + condimentSum.ToString("f2") + "*90%=" + (condimentSum * 0.9M).ToString("f2");
                 condimentSum = condimentSum * 0.9M;
